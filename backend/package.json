@@ -1,11 +1,12 @@
 {
-  "name": "upex-game-store",
+  "name": "fusion-games-store",
   "version": "1.0.0",
   "description": "An online store for purchasing video games.",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js"
+    "dev": "nodemon -r dotenv/config src/index.js",
+    "start": "node -r dotenv/config src/index.js"
   },
   "author": "Upekka",
   "license": "ISC",
