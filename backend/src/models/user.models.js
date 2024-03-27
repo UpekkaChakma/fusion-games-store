@@ -1,34 +1,30 @@
 import mongoose from "mongoose";
+import { z } from "zod";
 
 const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: true,
-      trim: true,
       unique: true,
-      minLength: 3,
-      maxLength: 20,
       index: true,
     },
     email: {
       type: String,
-      required: true,
-      trim: true,
       unique: true,
-      lowercase: true,
     },
-    password: {
-      type: String,
-      required: true,
-      minLength: 8,
-      maxLength: 20,
-    },
+    password: String,
+    avatar: String,
     refreshToken: String,
-    orderHistory: { gameId: mongoose.Schema.Types.ObjectId, ref: "Order" },
   },
   { timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);
 export default User;
+
+const userSchemaValidator = z.object({
+  username: z.string().min(3).max(40),
+  email: z.string().trim().email(),
+  password: z.string().min(8).max(20),
+  avatar: z.string().url().optional(),
+});

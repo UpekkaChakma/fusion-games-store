@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 import { z } from "zod";
 
 const gameSchema = new mongoose.Schema(
@@ -22,24 +22,25 @@ const gameSchema = new mongoose.Schema(
       storage: String,
     },
     languages: [String],
-    ratings: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-    reviews: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
     tags: [String],
+    archived: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
 
 const Game = mongoose.model("Game", gameSchema);
-
 export default Game;
 
-const gameValidator = z.object({
+const gameSchemaValidator = z.object({
   title: z.string().min(3).max(90).trim(),
   developer: z.string().min(3).max(90).trim(),
   publisher: z.string().min(3).max(90).trim(),
@@ -96,5 +97,7 @@ const gameValidator = z.object({
     })
     .optional(),
   description: z.array(z.string().min(20).max(2000)).nonempty(),
+  review: z.string().refine((value) => isValidObjectId(value)),
   tags: z.array(z.string().min(3)).optional(),
+  archived: z.boolean().optional(),
 });
