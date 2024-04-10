@@ -1,3 +1,5 @@
+import ApiError from "./ApiError.js";
+
 const handleDuplicateError = (error) => {
   const errorField = Object.keys(error.keyValue)[0];
   return new ApiError({

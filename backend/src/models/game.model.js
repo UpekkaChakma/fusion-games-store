@@ -71,7 +71,7 @@ const gameSchemaValidator = z.object({
   isArchived: z.boolean().default(false).optional(),
 });
 
-gameSchema.pre("save", async function validateData(next) {
+gameSchema.pre("save", async function (next) {
   try {
     const validatedData = gameSchemaValidator.parse(this.body);
     this.body = validatedData;
@@ -80,6 +80,16 @@ gameSchema.pre("save", async function validateData(next) {
     return next(error);
   }
 });
+
+gameSchema.methods.validateData = function (reqBody) {
+  try {
+    const newSchema = gameSchemaValidator.partial();
+    const parsedData = newSchema.parse(reqBody);
+    return parsedData;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const Game = mongoose.model("Game", gameSchema);
 export default Game;

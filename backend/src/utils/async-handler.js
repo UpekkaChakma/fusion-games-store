@@ -1,4 +1,4 @@
-import handleError from "./handle-error.js";
+import handleError from "./error/handle-error.js";
 
 const asyncHandler = (reqHandler) => {
   return (req, res, next) => {

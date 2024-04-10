@@ -5,8 +5,22 @@ import asyncHandler from "../utils/async-handler.js";
 import ApiError from "../utils/error/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
-const getAllGames = asyncHandler(async (req, res, next) => {});
-const findGameById = asyncHandler(async (req, res, next) => {});
+const getAllGames = asyncHandler(async (_req, res) => {
+  const result = await Game.find();
+  res.status(200).json(new ApiResponse({ statusCode: 200, data: result }));
+});
+
+const findGameById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  if (!isValidObjectId(id)) {
+    throw new ApiError({
+      statusCode: 400,
+      message: "Invalid id.",
+    });
+  }
+  const result = await Game.find(id);
+  res.status(200).json(new ApiResponse({ statusCode: 200, data: result }));
+});
 
 const createGame = asyncHandler(async (req, res) => {
   const newGame = new Game(req.body);
@@ -21,14 +35,38 @@ const createGame = asyncHandler(async (req, res) => {
   );
 });
 
-const updateGame = asyncHandler(async (req, res, next) => {});
+const updateGame = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  if (!isValidObjectId(id)) {
+    throw new ApiError({
+      statusCode: 400,
+      message: "Invalid id.",
+    });
+  }
+
+  const game = await Game.findById(id);
+  const parsedData = game.validateData(req.body);
+
+  const result = await Game.findByIdAndUpdate(
+    id,
+    { $set: parsedData },
+    { new: true }
+  );
+  res.status(200).json(
+    new ApiResponse({
+      statusCode: 204,
+      message: "Document updated successfully",
+      data: result,
+    })
+  );
+});
 
 const deleteGame = asyncHandler(async (req, res) => {
   const { id } = req.params;
   if (!isValidObjectId(id)) {
     throw new ApiError({
       statusCode: 400,
-      message: "id is not valid.",
+      message: "Invalid id.",
     });
   }
 
