@@ -14,4 +14,8 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+import gameRouter from "./routes/game.routes.js";
+
+app.use("/api/v1/game", gameRouter);
+
 export { app };
