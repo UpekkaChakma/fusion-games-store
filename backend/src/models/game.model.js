@@ -71,5 +71,15 @@ const gameSchemaValidator = z.object({
   isArchived: z.boolean().default(false).optional(),
 });
 
+gameSchema.pre("save", async function validateData(next) {
+  try {
+    const validatedData = gameSchemaValidator.parse(this.body);
+    this.body = validatedData;
+    return next();
+  } catch (error) {
+    return next(error);
+  }
+});
+
 const Game = mongoose.model("Game", gameSchema);
 export default Game;
