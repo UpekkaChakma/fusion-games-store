@@ -11,7 +11,7 @@ const router = Router();
 
 router.route("/create").post(createGame);
 
-router.route("/:id").get(findGameById);
+router.route("/id/:id").get(findGameById);
 router.route("/all-games").get(getAllGames);
 router.route("/update/:id").patch(updateGame);
 router.route("/delete/:id").delete(deleteGame);
