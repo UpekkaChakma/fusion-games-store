@@ -16,6 +16,24 @@ class ApiError extends Error {
       Error.captureStackTrace(this, this.constructor);
     }
   }
+  notFound() {
+    return {
+      statusCode: 404,
+      message: "Data not found",
+    };
+  }
+  serverError() {
+    return {
+      statusCode: 500,
+      message: "Internal server error",
+    };
+  }
+  invalidMongodbObjectId() {
+    return {
+      statusCode: 400,
+      message: "Invalid id.",
+    };
+  }
 }
 
 export default ApiError;
