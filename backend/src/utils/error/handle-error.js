@@ -7,15 +7,22 @@ const handleError = (error) => {
   if (error.code === 11000) {
     return handleDuplicateError(error);
   }
+
   if (error instanceof z.ZodError) {
     return handleZodError(error);
   }
-  if (error instanceof ApiError) {
+
+  if (error instanceof ApiError || error.statusCode) {
     return new ApiError({
       statusCode: error.statusCode,
       message: error.message,
     });
   }
+
+  return new ApiError({
+    statusCode: 500,
+    message: "Internal server error",
+  });
 };
 
 export default handleError;
