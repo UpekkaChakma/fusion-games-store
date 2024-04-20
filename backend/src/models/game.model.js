@@ -18,7 +18,7 @@ const gameSchema = new mongoose.Schema(
     images: [String],
     price: Number,
     releaseDate: Date,
-    genre: [String],
+    genres: [String],
     platforms: [String],
     languages: [String],
     description: [String],
@@ -73,8 +73,7 @@ const gameSchemaValidator = z.object({
 
 gameSchema.pre("save", async function (next) {
   try {
-    const validatedData = gameSchemaValidator.parse(this.body);
-    this.body = validatedData;
+    gameSchemaValidator.parse(this.body);
     return next();
   } catch (error) {
     return next(error);
