@@ -25,8 +25,10 @@ export default handleZodError;
 const getFormattedError = (errors) => {
   return errors.map((obj) => {
     const length = obj.path.length;
-    const fieldName = length > 1 ? obj.path[length - 2] : obj.path[length - 1];
-    // obj.path[length - 1] == 0 ? obj.path[length - 2] : obj.path[length - 1];
+    const firstItem = obj.path[0];
+    const lastItem = obj.path[length - 1];
+
+    const fieldName = lastItem !== 0 ? lastItem : firstItem;
 
     if (obj.code === ZodIssueCode.invalid_type) {
       return obj.received === "undefined"
