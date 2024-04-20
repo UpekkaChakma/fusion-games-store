@@ -19,19 +19,22 @@ class ApiError extends Error {
   notFound() {
     return {
       statusCode: 404,
-      message: "Data not found",
+      message: this.message || "Data not found",
+      errors: this.errors,
     };
   }
   serverError() {
     return {
       statusCode: 500,
       message: "Internal server error",
+      errors: this.errors,
     };
   }
   invalidMongodbObjectId() {
     return {
       statusCode: 400,
-      message: "Invalid id.",
+      message: "Invalid mongodb id.",
+      errors: this.errors,
     };
   }
 }
